@@ -1,1 +1,4 @@
-export class UserEnty {}
+
+export class UserEnty {
+    
+}
