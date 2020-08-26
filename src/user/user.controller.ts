@@ -1,7 +1,9 @@
-import { Controller, Get, Post, Put, Delete, Param, Body } from '@nestjs/common';
+import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, EditUserDto } from './dtos';
+import { ApiTags } from '@nestjs/swagger';
 
+@ApiTags('User')
 @Controller('user')
 export class UserController {
     constructor(
@@ -16,7 +18,7 @@ export class UserController {
     
     @Get(':id')
     async getOne(
-        @Param() id: number
+        @Param('id', ParseIntPipe) id: number
     ) {
         const data = await this.userService.getOne(id);
         return { data };
@@ -35,7 +37,7 @@ export class UserController {
     
     @Put(':id')
     async editOne(
-        @Param() id: number,
+        @Param('id') id: number,
         @Body() dto: EditUserDto
     ) {
       const data = await this.userService.editOne(id, dto);
@@ -47,7 +49,7 @@ export class UserController {
 
     @Delete(':id')
     async deleteOne(
-        @Param() id: number
+        @Param('id') id: number
     ) {
         const data = await this.userService.deleteOne(id);
         return { message: "Usuario eliminado", data }

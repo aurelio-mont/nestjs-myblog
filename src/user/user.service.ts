@@ -40,6 +40,10 @@ export class UserService {
     async editOne(id: number, dto: EditUserDto) {
         const user = await this.getOne(id);
         const editUser = Object.assign(user, dto);
+        const userExist = await this.userRepository.findOne({ email: dto.email });
+        if (userExist) {
+            throw new BadRequestException('El Usuario ya esta registrado');
+        }
         const  editedUser = await this.userRepository.save(editUser);
         delete editedUser.password;
         return editedUser;
