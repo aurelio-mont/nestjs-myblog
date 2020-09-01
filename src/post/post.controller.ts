@@ -12,6 +12,7 @@ import { ApiTags } from '@nestjs/swagger';
 
 import { PostService } from './post.service';
 import { CreatePostDto, EditPostDto } from './dtos';
+import { Auth } from 'src/common/decorators';
 
 @ApiTags('Posts')
 @Controller('post')
@@ -30,18 +31,21 @@ export class PostController {
     return { data };
   }
 
+  @Auth()
   @Post()
   async createPost(@Body() dto: CreatePostDto) {
     const data = await this.postService.createOne(dto);
     return { message: 'Post created', data };
   }
 
+  @Auth()
   @Put(':id')
   async editOne(@Param('id') id: number, @Body() dto: EditPostDto) {
     const data = await this.postService.editOne(id, dto);
     return { message: 'Post edited', data };
   }
 
+  @Auth()
   @Delete(':id')
   async deleteOne(@Param('id') id: number) {
     const data = await this.postService.deleteOne(id);

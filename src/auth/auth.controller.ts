@@ -4,7 +4,6 @@ import { LoginDto } from './dtos/login.dto';
 import { User as UserEntity } from 'src/user/entities';
 import { User, Auth } from 'src/common/decorators';
 import { LocalAuthGuard, JwtAuthGuard } from './guards';
-import { JwtStrategy } from './strategies';
 import { ApiTags } from '@nestjs/swagger';
 
 @ApiTags('Auth routes')
@@ -15,6 +14,7 @@ export class AuthController {
     @UseGuards(LocalAuthGuard)
     @Post('login')
     async login(
+        @Body() loginDto: LoginDto,
         @User() user: UserEntity
     ) {
         const data = await this.authService.login(user);

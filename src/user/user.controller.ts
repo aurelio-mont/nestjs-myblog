@@ -2,6 +2,7 @@ import { Controller, Get, Post, Put, Delete, Param, Body, ParseIntPipe } from '@
 import { UserService } from './user.service';
 import { CreateUserDto, EditUserDto } from './dtos';
 import { ApiTags } from '@nestjs/swagger';
+import { Auth } from 'src/common/decorators';
 
 @ApiTags('User')
 @Controller('user')
@@ -24,6 +25,7 @@ export class UserController {
         return { data };
     }
 
+    @Auth()
     @Post()
     async createOne(
         @Body() dto: CreateUserDto
@@ -35,6 +37,7 @@ export class UserController {
         };
     }
     
+    @Auth()
     @Put(':id')
     async editOne(
         @Param('id') id: number,
@@ -47,6 +50,7 @@ export class UserController {
     };  
     }
 
+    @Auth()
     @Delete(':id')
     async deleteOne(
         @Param('id') id: number
@@ -54,5 +58,4 @@ export class UserController {
         const data = await this.userService.deleteOne(id);
         return { message: "Usuario eliminado", data }
     }
-
 }
