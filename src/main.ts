@@ -1,18 +1,21 @@
+
 import { NestFactory } from '@nestjs/core';
 import { Logger, ValidationPipe } from '@nestjs/common';
 
 import { AppModule } from './app.module';
 import { initSwagger } from './app.swagger';
 import { ConfigService } from '@nestjs/config';
-import { SEVER_PORT } from './config/constants';
+import { SERVER_PORT } from './config/constants';
+import { setDefaultUser } from './config/default-user';
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
   const logger = new Logger('Bootstrap');
   const config = app.get(ConfigService);
-  const port = parseInt(config.get<string>(SEVER_PORT), 10) || 5000;
+  const port = parseInt(config.get<string>(SERVER_PORT), 10) || 3000;
 
   initSwagger(app);
+  setDefaultUser(config);
 
   app.useGlobalPipes(
     new ValidationPipe({
