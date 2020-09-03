@@ -3,6 +3,7 @@ import { UserService } from './user.service';
 import { CreateUserDto, EditUserDto } from './dtos';
 import { ApiTags } from '@nestjs/swagger';
 import { Auth } from 'src/common/decorators';
+import { AppResource } from 'src/app.roles';
 
 @ApiTags('User')
 @Controller('user')
@@ -25,7 +26,11 @@ export class UserController {
         return { data };
     }
 
-    @Auth()
+    @Auth({
+        possession: 'any',
+        action: 'create',
+        resource: AppResource.USER,
+      })
     @Post()
     async createOne(
         @Body() dto: CreateUserDto
@@ -37,7 +42,11 @@ export class UserController {
         };
     }
     
-    @Auth()
+    @Auth({
+        possession: 'own',
+        action: 'update',
+        resource: AppResource.USER,
+      })
     @Put(':id')
     async editOne(
         @Param('id') id: number,
@@ -50,7 +59,11 @@ export class UserController {
     };  
     }
 
-    @Auth()
+    @Auth({
+        action: 'delete',
+        possession: 'own',
+        resource: AppResource.USER,
+      })
     @Delete(':id')
     async deleteOne(
         @Param('id') id: number
